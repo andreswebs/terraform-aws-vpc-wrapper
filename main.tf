@@ -3,11 +3,14 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  az_items = var.az_items == "" || var.az_items == null ? [] : [for item in split(",", var.az_items) : tonumber(item)]
-
-  azs = var.az_items == "" || var.az_items == null ? slice(data.aws_availability_zones.available.names, 0, 3) : [
-    for idx in local.az_items : data.aws_availability_zones.available.names[idx]
-  ]
+  az_index_strings = var.az_indexes == "" || var.az_indexes == null ? [] : [for item in split(",", var.az_indexes) : item]
+  az_ids = var.az_indexes == "" || var.az_indexes == null ? [] : flatten([for idx_str in local.az_index_strings : [
+    for az_id in data.aws_availability_zones.available.zone_ids : az_id if endswith(az_id, idx_str)
+  ]])
+  az_indexes = var.az_indexes == "" || var.az_indexes == null ? [] : [for az_id in local.az_ids : index(data.aws_availability_zones.available.zone_ids, az_id)]
+  azs = var.az_indexes == "" || var.az_indexes == null ? slice(data.aws_availability_zones.available.names, 0, 3) : sort([
+    for idx in local.az_indexes : data.aws_availability_zones.available.names[idx]
+  ])
 
   is_eks = var.eks_cluster_name != null && var.eks_cluster_name != ""
 
