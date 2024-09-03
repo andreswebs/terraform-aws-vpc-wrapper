@@ -30,6 +30,7 @@ module "network" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_az_items"></a> [az\_items](#input\_az\_items) | n/a | `string` | `null` | no |
 | <a name="input_eks_cluster_name"></a> [eks\_cluster\_name](#input\_eks\_cluster\_name) | n/a | `string` | `null` | no |
 | <a name="input_network_cidr_ipv4"></a> [network\_cidr\_ipv4](#input\_network\_cidr\_ipv4) | n/a | `string` | `"10.20.8.0/21"` | no |
 | <a name="input_network_name"></a> [network\_name](#input\_network\_name) | n/a | `string` | n/a | yes |

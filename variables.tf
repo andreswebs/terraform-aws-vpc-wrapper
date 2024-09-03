@@ -37,3 +37,12 @@ variable "public_subnet_tags" {
   default = {}
 }
 
+
+variable "az_items" {
+  type    = string
+  default = null
+  validation {
+    condition     = var.az_items == "" || var.az_items == null || can(regex("^\\d,\\d,\\d$", var.az_items))
+    error_message = "The input must be a comma-separated list of three single-digit numbers [0-9] in the format: x,y,z"
+  }
+}

@@ -3,10 +3,11 @@ data "aws_availability_zones" "available" {
 }
 
 locals {
-  azs = slice(data.aws_availability_zones.available.names, 0, 3)
-}
+  az_items = var.az_items == "" || var.az_items == null ? [] : [for item in split(",", var.az_items) : tonumber(item)]
 
-locals {
+  azs = var.az_items == "" || var.az_items == null ? slice(data.aws_availability_zones.available.names, 0, 3) : [
+    for idx in local.az_items : data.aws_availability_zones.available.names[idx]
+  ]
 
   is_eks = var.eks_cluster_name != null && var.eks_cluster_name != ""
 
@@ -15,8 +16,6 @@ locals {
     "kubernetes.io/cluster/${var.eks_cluster_name}" = "shared"
     "karpenter.sh/discovery"                        = var.eks_cluster_name
   } : {}
-
-
 
   public_subnet_tags_eks = local.is_eks ? {
     "kubernetes.io/role/elb"                        = 1
