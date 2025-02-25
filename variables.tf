@@ -41,7 +41,12 @@ variable "az_indexes" {
   type    = string
   default = null
   validation {
-    condition     = var.az_indexes == "" || var.az_indexes == null || can(regex("^\\d,\\d,\\d$", var.az_indexes))
+    condition     = var.az_indexes == "" || var.az_indexes == null || can(regex("^\\d,\\d(?:,\\d)?$", var.az_indexes))
     error_message = "The input must be a comma-separated list of three single-digit numbers [0-9] in the format: x,y,z"
   }
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
 }

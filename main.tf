@@ -39,7 +39,7 @@ locals {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.1"
+  version = "~> 5.19"
 
   name                 = var.network_name
   cidr                 = var.network_cidr_ipv4
@@ -54,4 +54,5 @@ module "vpc" {
   private_subnet_tags = local.private_subnet_tags
   public_subnet_tags  = local.public_subnet_tags
 
+  tags = var.tags
 }
